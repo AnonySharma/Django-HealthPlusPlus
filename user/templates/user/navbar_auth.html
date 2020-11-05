@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-md" style="background-color: rgba(0, 0, 0, 0.18); height: fit-content; padding: 50px;">
+    <a href="#" class="navbar-brand">
+        <img src="http://placehold.it/180x60/666/FF0/?text=Health%20%2B%2B" alt="Health++ Logo">
+    </a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ml-auto">
+            <a href="{% url 'dashboard' %}" class="nav-item nav-link active" style="margin-right: 30px;">Dashboard</a>
+            <a href="{% url 'profile' %}" class="nav-item nav-link" style="margin-right: 30px;">Profile</a>
+            <a href="{% url 'about' %}" class="nav-item nav-link" style="margin-right: 80px;">About</a>
+            <a href="{% url 'logout' %}"><button type="button" class="butn">Logout</button></a>
+        </div>
+    </div>
+</nav>

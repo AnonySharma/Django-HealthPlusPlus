@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="fullscr">
+        <div class="box infodiv">
+            <a href="{% url 'home' %}" style="text-decoration: none;">
+                <div class="back-but">
+                    <span style="color: white;">
+                        <i class="fa fa-arrow-circle-left" style="color: #eee;"></i> &nbsp;&nbsp;Back to Home
+                    </span>
+                </div>
+            </a>
+                <div style="padding: 70px; color: #eee; font-size: 1.5em; text-align: center;">
+                <img src="http://placehold.it/220x80/000/FF0/?text=Health%20%2B%2B" alt="Health++ Logo">
+                <br>
+                <br>
+                <br>
+                <p class="noselect">Health++ is an application which helps you in managing your diet. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum corporis id non placeat nam, maxime maiores commodi repudiandae hic quaerat quidem soluta a adipisci impedit amet! Enim itaque quos iusto!</p>
+            </div>
+        </div>
+        <div class="box formdiv">
+            <div style="padding: 30px;">
+                <div class="slider-parent">
+                    <div class="slider temp tog-active" onclick="togglelogin(0)">
+                        Login
+                    </div><div class="slider temp" onclick="togglelogin(1)">
+                        Signup
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="form-content">
+                    <form name="login-form" action="/login/" method="post">
+                        {% csrf_token %}
+                        <span class="noselect">Username:</span>
+                        <br>
+                        <input type="text" class="textbox" id="username" name="username">
+                        <br>
+                        <br>
+                        <span class="noselect">Password:</span>
+                        <br>
+                        <input type="password" class="textbox" id="password" name="password">
+                        <br>
+                        <br>
+                        <br>
+                        <div class="form-but-holder">
+                            <input type="submit" value="Login" class="form-but">
+                        </div>
+                        <br>
+                        <div class="noselect fpass">
+                            <span>
+                                Forgot Password?
+                            </span>
+                        </div>
+                        <br>
+                        <br>
+                        <div style="text-align: inherit; color: yellow;">
+                            <!-- <h6>
+                                Possible errors:
+                            </h6> -->
+                            <ul>
+                            {% for error in messages %}
+                                <li>{{ error }}</li>
+                                <!-- <br> -->
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-content" style="display: none;">
+                    <form name="signup-form" action="/register/" method="post">
+                        {% csrf_token %}
+                        <span class="noselect">Username:</span>
+                        <br>
+                        <input type="text" class="textbox" id="username-reg" name="username-reg">
+                        <br>
+                        <br>
+                        <span class="noselect">Email:</span>
+                        <br>
+                        <input type="email" class="textbox" id="email-reg" name="email-reg">
+                        <br>
+                        <br>
+                        <span class="noselect">Password:</span>
+                        <br>
+                        <input type="password" class="textbox" id="password-reg" name="password-reg">
+                        <br>
+                        <br>
+                        <br>
+                        <div class="form-but-holder">
+                            <input type="submit" value="Signup" class="form-but">
+                        </div>
+                        <br>
+
+                        <div style="text-align: center; color: yellow;">
+                            <ul>
+                                {% for error in messages %}
+                                    <li>{{ error }}</li>
+                                    <!-- <br> -->
+                                {% endfor %}
+                                </ul>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if goto_signup %}
+            <script>
+                // console.log("Hey")
+                togglelogin(1)
+            </script>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}

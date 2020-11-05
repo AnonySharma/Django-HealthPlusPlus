@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'user/navbar_auth.html' %}
+    <h1 style="text-align: center;">DASHBOARD</h1>
+    <p>Welcome, {{ user.username }}.</p>
+    <a href="{% url 'logout' %}">LOGOUT</a>
+
+{% include 'footer.html' %}
+{% endblock content %}

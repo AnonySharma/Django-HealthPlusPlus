@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'user/navbar_auth.html' %}
+
+    <p>Profile</p>
+    <p>Welcome, {{ user.username }}.</p>
+
+{% include 'footer.html' %}
+{% endblock content %}
