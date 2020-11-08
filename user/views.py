@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-# from .models import User
+from .models import User
 
 # Create your views here.
 def home(request):
@@ -60,6 +60,7 @@ def register_user(request):
         user = authenticate(username=username, password=password)
         if not UserModel.objects.filter(username=username).exists():
             user=UserModel.objects.create_user(username, password=password)
+            our_user=User.objects.create(username=username, email=email, djangouser= user)
             user.save()
         else:
             messages.info(request, 'Username exists already!')
