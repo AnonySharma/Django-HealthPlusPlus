@@ -10,8 +10,8 @@ class User(models.Model):
     email = models.CharField(max_length=200, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
-    # def __str__(self):
-        # return self.username
+    def __str__(self):
+        return self.username
 
 class FoodItem(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -29,8 +29,8 @@ class UserMeal(models.Model):
     user = models.ForeignKey(User, null=True ,on_delete=models.CASCADE)
     # fooditem = models.ManyToManyField(FoodItem, null=True ,on_delete=models.CASCADE)
     fooditem = models.ManyToManyField(FoodItem)
+    quantity = models.IntegerField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
-
 
     def __str__(self):
         return self.user.name

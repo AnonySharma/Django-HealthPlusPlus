@@ -8,9 +8,9 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ml-auto">
-            <a href="{% url 'dashboard' %}" class="nav-item nav-link active" style="margin-right: 30px;">Dashboard</a>
-            <a href="{% url 'profile' %}" class="nav-item nav-link" style="margin-right: 30px;">Profile</a>
-            <a href="{% url 'about' %}" class="nav-item nav-link" style="margin-right: 80px;">About</a>
+            <a href="{% url 'dashboard' %}" class="nav-item nav-link {% if request.resolver_match.url_name == "dashboard" %}active{% endif %}" style="margin-right: 30px;">Dashboard</a>
+            <a href="{% url 'profile' %}" class="nav-item nav-link {% if request.resolver_match.url_name == "profile" %}active{% endif %}" style="margin-right: 30px;">Profile</a>
+            <a href="{% url 'about' %}" class="nav-item nav-link {% if request.resolver_match.url_name == "about" %}active{% endif %}" style="margin-right: 80px;">About</a>
             <a href="{% url 'logout' %}"><button type="button" class="butn">Logout</button></a>
         </div>
     </div>

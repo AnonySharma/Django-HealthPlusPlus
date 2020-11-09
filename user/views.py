@@ -1,11 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from .models import User
+from .models import *
+
+UserModel = get_user_model()
 
 # Create your views here.
 def home(request):
@@ -38,6 +40,8 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                # listOfUserMeals=[str(elem) for elem in list(UserMeal.objects.filter(user.username==username))]
+                # print(UserMeal.objects.all().filter(user.username==username))
                 return HttpResponseRedirect('/dashboard/')
         else:
             messages.info(request, 'Username or password is not correct!')
@@ -48,29 +52,56 @@ def login_user(request):
     print("Not Logged In")
     return render(request, 'login.html')
 
-UserModel = get_user_model()
 def register_user(request):
     # logout(request)
-    username = password = email = ""
+    username = password = email = fname = lname = ""
     if request.POST:
         username = request.POST.get('username-reg')
         email = request.POST.get('email-reg')
         password = request.POST.get('password-reg')
-
+        fname = request.POST.get('fname')
+        # lname = request.POST.get('lname')
         user = authenticate(username=username, password=password)
         if not UserModel.objects.filter(username=username).exists():
-            user=UserModel.objects.create_user(username, password=password)
-            our_user=User.objects.create(username=username, email=email, djangouser= user)
+            user=UserModel.objects.create_user(username, password=password, email=email, first_name=fname, last_name=lname)
+            our_user=User.objects.create(username=username, email=email, djangouser=user, name=fname+lname)
             user.save()
         else:
             messages.info(request, 'Username exists already!')
             print("Registered already")
-            return render(request, 'login.html',{'goto_signup':1})
+            return render(request, 'login.html', {'goto_signup':1})
 
     return render(request, 'login.html')
 
+@login_required(login_url='')
 def logout_user(request):
     print("Logged Out")
     logout(request)
     # return HttpResponseRedirect('')
     return render(request, 'loggedout.html')
+
+@login_required(login_url='')
+def add_food_item(request):
+    name = tot_cal = fat = chol = carb = prot = vitam = ""
+    if request.POST :
+        name = request.POST.get('food-name')
+        tot_cal = request.POST.get('food-cal')
+        fat = request.POST.get('food-fats')
+        chol = request.POST.get('food-chol')
+        carb = request.POST.get('food-carbs')
+        prot = request.POST.get('food-prot')
+        vitam = request.POST.get('food-vit')
+
+        if not FoodItem.objects.filter(name=name).exists():
+            FoodItem.objects.create(name=name, total_calories=tot_cal, fat=fat, cholesterol=chol, carbohydrate=carb, protiens=prot, vitamins=vitam)
+            messages.info(request, 'Food Item added!')
+        else:
+            messages.info(request, 'Food with same name already exists!')
+
+    listOfFoodItems=[str(elem) for elem in list(FoodItem.objects.all().values_list('name', flat=True))]
+    print(listOfFoodItems)
+    # listOfUserMeals=UserMeal.objects.all()
+    return redirect('/dashboard/', lfi=listOfFoodItems)
+
+def add_user_meal(request):
+    pass

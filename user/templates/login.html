@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block title %} Login | Health++ {% endblock %}
 {% block content %}
     <div class="fullscr">
         <div class="box infodiv">
@@ -68,7 +68,7 @@
                             {% endfor %}
                             </ul>
                         </div>
-                    </form>
+                    </form>  
                 </div>
                 <div class="form-content" style="display: none;">
                     <form name="signup-form" action="/register/" method="post">
@@ -76,6 +76,11 @@
                         <span class="noselect">Username:</span>
                         <br>
                         <input type="text" class="textbox" id="username-reg" name="username-reg">
+                        <br>
+                        <br>
+                        <span class="noselect">Name:</span>
+                        <br>
+                        <input type="text" class="textbox" id="fname" name="fname">
                         <br>
                         <br>
                         <span class="noselect">Email:</span>
