@@ -55,8 +55,9 @@
         </div>
         <!-- <br style="clear: both;"> -->
         <div style="width: 50%; text-align: center; float: right;">
-            <button onclick="showAddUserMealForm()">Add user meal</button>
-            <form style="display: none;" class="addMeal">
+            <h1>{{ user.id }}</h1>
+            <a href="{% url 'addusermeal' user.id %}"><button>Add user meal</button></a>
+            <!-- <form style="display: none;" class="addMeal">
                 {% csrf_token %}
                 <br>
                 <br>
@@ -75,8 +76,7 @@
                 <div class="form-but-holder">
                     <input type="submit" value="Add" class="form-but">
                 </div>
-                <!-- <button>Submit</button> -->
-            </form>
+            </form> -->
         </div>
     </div>
     <br style="clear: both;">

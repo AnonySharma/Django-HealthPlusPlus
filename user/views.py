@@ -2,10 +2,16 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User as DjangoUser
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.forms import inlineformset_factory
+from django.contrib.auth.forms import UserCreationForm
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from .models import *
+from .forms import *
 
 UserModel = get_user_model()
 
@@ -13,6 +19,15 @@ UserModel = get_user_model()
 def home(request):
     # return HttpResponse("Home")
     return render(request, "landing.html")
+
+@receiver(post_save, sender=DjangoUser)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=DjangoUser)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 @login_required(login_url='')
 def dashboard(request):
@@ -64,7 +79,7 @@ def register_user(request):
         user = authenticate(username=username, password=password)
         if not UserModel.objects.filter(username=username).exists():
             user=UserModel.objects.create_user(username, password=password, email=email, first_name=fname, last_name=lname)
-            our_user=User.objects.create(username=username, email=email, djangouser=user, name=fname+lname)
+            # our_user=User.objects.create(username=username, email=email, djangouser=user, name=fname+lname)
             user.save()
         else:
             messages.info(request, 'Username exists already!')
@@ -103,5 +118,28 @@ def add_food_item(request):
     # listOfUserMeals=UserMeal.objects.all()
     return redirect('/dashboard/', lfi=listOfFoodItems)
 
-def add_user_meal(request):
-    pass
+@login_required(login_url='')
+def add_user_meal(request, pk):
+    # print(request.POST)
+    UserMealFormSet = inlineformset_factory(Profile, UserMeal, fields=('fooditem',), extra=1)
+    # xy=list(i.name for i in DjangoUser.objects.all().first()._meta.fields)
+    # tmp=User.objects.all().filter(id=pk)
+    user=Profile.objects.all().get(id=pk)
+    formset = UserMealFormSet(queryset=UserMeal.objects.none(), instance=user)
+    # user=None
+    # print(xy)
+    # print(pk,type(tmp),type(user))
+    # for i in xy:
+    #     if i in ["date", "djangouser", "djangouser_id", "email", "id", "name", "usermeal", "username"]:
+    #         print(tmp.values(i),user.values(i))
+
+    if request.method == 'POST':
+        form = UserMealForm(request.POST)
+        formset = UserMealFormSet(request.POST, instance=user)
+        # form.save()
+        if formset.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {'form':formset}
+    return render(request, 'add_usermeal.html', context)

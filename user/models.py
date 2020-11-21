@@ -2,16 +2,23 @@ from django.db import models
 from django import forms
 from django.contrib.auth import get_user_model
 
+UserModel = get_user_model()
+
 # Create your models here.
 class User(models.Model):
-    djangouser = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)
+    djangouser = models.ForeignKey(UserModel, null=True, on_delete=models.CASCADE)
     username= models.CharField(max_length=200, null=True)
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.username
+        return "MyUser:"+self.username
+
+class Profile(models.Model):
+    user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
+    email = models.CharField(max_length=200, null=True, blank=True)
+    username = models.CharField(max_length=200, null=True)
 
 class FoodItem(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -26,7 +33,7 @@ class FoodItem(models.Model):
         return self.name
 
 class UserMeal(models.Model):
-    user = models.ForeignKey(User, null=True ,on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, null=True ,on_delete=models.CASCADE)
     # fooditem = models.ManyToManyField(FoodItem, null=True ,on_delete=models.CASCADE)
     fooditem = models.ManyToManyField(FoodItem)
     quantity = models.IntegerField(null=True, blank=True)
