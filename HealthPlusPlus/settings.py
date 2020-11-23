@@ -14,6 +14,7 @@ from pathlib import Path
 import chartkick
 import dj_database_url
 import django_heroku
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
