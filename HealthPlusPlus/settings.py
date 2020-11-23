@@ -28,7 +28,7 @@ SECRET_KEY = 'v7gxe@x6$qm4oj@pi+5kyh^54w!-t+j#ov@sa+v=l+vhkdh8lf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://health-plus-plus.herokuapp.com/']
 
 
 # Application definition
