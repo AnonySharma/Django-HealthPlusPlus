@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import chartkick
+import dj_database_url
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'v7gxe@x6$qm4oj@pi+5kyh^54w!-t+j#ov@sa+v=l+vhkdh8lf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'HealthPlusPlus.urls'
@@ -80,13 +83,15 @@ WSGI_APPLICATION = 'HealthPlusPlus.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'HPP_database',
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': 'HPP_database',
-        'USER': 'django',
-        'PASSWORD': 'Django@2020',
-        'HOST': 'localhost',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'HPP_database',
+        # 'USER': 'django',
+        # 'PASSWORD': 'Django@2020',
+        # 'HOST': 'localhost',
     }
 }
 
@@ -127,6 +132,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR/'db.sqlite3',
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
@@ -136,5 +142,9 @@ STATICFILES_DIRS = [
     chartkick.js(),
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 LOGIN_URL='../login/'
 LOGIN_REDIRECT_URL=''
+
+django_heroku.settings(locals())
