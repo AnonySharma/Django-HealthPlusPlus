@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %} Login | Health++ {% endblock %}
 {% block content %}
     <div class="fullscr">
@@ -10,12 +12,16 @@
                     </span>
                 </div>
             </a>
-                <div style="padding: 70px; color: #eee; font-size: 1.5em; text-align: center;">
-                <img src="http://placehold.it/220x80/000/FF0/?text=Health%20%2B%2B" alt="Health++ Logo">
+            <div style="padding: 70px; color: #eee; font-size: 1.5em; text-align: center;">
                 <br>
                 <br>
                 <br>
-                <p class="noselect">Health++ is an application which helps you in managing your diet. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum corporis id non placeat nam, maxime maiores commodi repudiandae hic quaerat quidem soluta a adipisci impedit amet! Enim itaque quos iusto!</p>
+                <img src="{% static 'images/logo.png' %}" alt="Health++ Logo" width="250px">
+                <br>
+                <br>
+                <br>
+                <p class="noselect">Health++ is an application that helps user to manage their diet and calories consumption. 
+                    It provides a common platform for dieticians and their patients, so that they can manage a proper diet. </p>
             </div>
         </div>
         <div class="box formdiv">

@@ -18,11 +18,7 @@ from django.urls import path, include
 from django.http import HttpResponse
 from django.shortcuts import render
 
-def about(request):
-    return render(request, 'about.html')
-
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
-    path('about/', about, name="about"),
     path('', include('user.urls'))
 ]

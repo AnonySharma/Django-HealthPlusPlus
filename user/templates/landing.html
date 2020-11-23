@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} Health++ {% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
@@ -8,10 +9,15 @@
     <br>
     <hr>
     <br>
+    <div class="image-div" style="text-align: center;">
+        <img src="{% static 'images/diet.jpg' %}" style="width: 400px;"/>
+    </div>
+    <br>
     <h1>
         <b>Health++</b> helps user to manage their diet and calories consumption. 
-        It also provides a common platform for dieticians and their patients, so that they can manage a proper diet. 
+        It provides a common platform for dieticians and their patients, so that they can manage a proper diet. 
     </h1>
 </div>
+<br>
 {% include 'footer.html' %}
 {% endblock content %}

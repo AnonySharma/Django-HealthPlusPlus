@@ -18,7 +18,6 @@ UserModel = get_user_model()
 
 # Create your views here.
 def home(request):
-    # return HttpResponse("Home")
     return render(request, "landing.html")
 
 @receiver(post_save, sender=DjangoUser)
@@ -30,9 +29,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
+def about(request):
+    return render(request, 'about.html')
+
 @login_required(login_url='')
 def dashboard(request):
-    print("---------------------------------------------------------------------------",request.user.id)
     user = Profile.objects.get(user_id=request.user.id)
     total=UserMeal.objects.all()
     myUserMeals=total.filter(user=user)
@@ -50,16 +51,31 @@ def dashboard(request):
     for foods in finalFoodItems:
         totalCalories+=foods.total_calories
     
-    cnt=myUserMeals.count()
-    isEmpty = True if cnt==0 else False
-    print(myUserMeals)
-    print(isEmpty)
+    isEmpty = myUserMeals.count()==0
     context = {'Total':totalCalories, 'AllFoodItems': finalFoodItems, 'isEmpty':isEmpty}
     return render(request, "user/dashboard.html",context)
 
 @login_required(login_url='')
 def profile(request):
-    return render(request, "user/profile.html")
+    user = Profile.objects.get(user_id=request.user.id)
+    myUserMeals=UserMeal.objects.all().filter(user=user)
+
+    fats=chol=carb=prot=vit=0    
+    for food in myUserMeals:
+        for item in food.fooditem.all():
+            fats+=item.fat
+            chol+=item.cholesterol
+            carb+=item.carbohydrate
+            prot+=item.protiens
+            vit+=item.vitamins
+
+    total = (fats+chol+carb+prot+vit)/100
+    context = dict()
+    if total!=0:
+        context['data'] = {'Fats': str(round(fats/total, 2)), 'Cholesterol': str(round(chol/total, 2)), 'Carbohydrates': str(round(carb/total, 2)), 'Proteins': str(round(prot/total, 2)), 'Vitamins': str(round(vit/total, 2))}
+    
+    context['zero'] = total == 0
+    return render(request, "user/profile.html", context)
 
 def login_page(request):
     return render(request, "login.html")
@@ -78,7 +94,6 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                print(request)
                 return HttpResponseRedirect('/dashboard/')
         else:
             messages.info(request, 'Username or password is not correct!')
@@ -101,7 +116,6 @@ def register_user(request):
         user = authenticate(username=username, password=password)
         if not UserModel.objects.filter(username=username).exists():
             user=UserModel.objects.create_user(username, password=password, email=email, first_name=fname, last_name=lname)
-            # our_user=User.objects.create(username=username, email=email, djangouser=user, name=fname+lname)
             user.save()
         else:
             messages.info(request, 'Username exists already!')
@@ -135,14 +149,11 @@ def add_food_item(request):
         else:
             messages.info(request, 'Food with same name already exists!')
 
-    listOfFoodItems=[str(elem) for elem in list(FoodItem.objects.all().values_list('name', flat=True))]
-    print(listOfFoodItems)
-    # listOfUserMeals=UserMeal.objects.all()
     return redirect('/dashboard/', lfi=listOfFoodItems)
 
 @login_required(login_url='')
 def add_user_meal(request, pk):
-    UserMealFormSet = inlineformset_factory(Profile, UserMeal, fields=('fooditem',), extra=10)
+    UserMealFormSet = inlineformset_factory(Profile, UserMeal, fields=('fooditem',), extra=5)
     user = Profile.objects.get(id=request.user.id)
     formset = UserMealFormSet(queryset=UserMeal.objects.none(), instance=user)
 

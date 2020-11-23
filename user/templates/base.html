@@ -19,6 +19,11 @@
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body style="background-image: linear-gradient(135deg, rgba(255, 99, 71, 1), rgba(255, 99, 71, 0.6)) !important;">
+    <div style="bottom: 20px; right: 20px; position: absolute; z-index: 100;">
+        <a href="https://github.com/AnonySharma/Django-HealthPlusPlus" target="new">
+            <img src="{% static 'images/git.png' %}" height="64px">
+        </a>
+    </div>
     {% block content %}
 
     {% endblock content %}
