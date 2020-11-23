@@ -12,6 +12,7 @@ from django.dispatch import receiver
 
 from .models import *
 from .forms import *
+from uuid import uuid4
 
 UserModel = get_user_model()
 
@@ -23,7 +24,7 @@ def home(request):
 @receiver(post_save, sender=DjangoUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance, email=instance.email, username=instance.username)
 
 @receiver(post_save, sender=DjangoUser)
 def save_user_profile(sender, instance, **kwargs):
@@ -31,7 +32,30 @@ def save_user_profile(sender, instance, **kwargs):
 
 @login_required(login_url='')
 def dashboard(request):
-    return render(request, "user/dashboard.html")
+    print("---------------------------------------------------------------------------",request.user.id)
+    user = Profile.objects.get(user_id=request.user.id)
+    total=UserMeal.objects.all()
+    myUserMeals=total.filter(user=user)
+    
+    allUserMeals=[]
+    for food in myUserMeals:
+        allUserMeals.append(food.fooditem.all())
+
+    finalFoodItems=[]
+    for usermeal in allUserMeals:
+        for food_items in usermeal:
+            finalFoodItems.append(food_items)
+    
+    totalCalories=0
+    for foods in finalFoodItems:
+        totalCalories+=foods.total_calories
+    
+    cnt=myUserMeals.count()
+    isEmpty = True if cnt==0 else False
+    print(myUserMeals)
+    print(isEmpty)
+    context = {'Total':totalCalories, 'AllFoodItems': finalFoodItems, 'isEmpty':isEmpty}
+    return render(request, "user/dashboard.html",context)
 
 @login_required(login_url='')
 def profile(request):
@@ -41,7 +65,6 @@ def login_page(request):
     return render(request, "login.html")
 
 def login_user(request):
-    # logout(request)
     if request.user.is_authenticated:
         return HttpResponseRedirect('/dashboard/')
 
@@ -55,14 +78,13 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                # listOfUserMeals=[str(elem) for elem in list(UserMeal.objects.filter(user.username==username))]
-                # print(UserMeal.objects.all().filter(user.username==username))
+                print(request)
                 return HttpResponseRedirect('/dashboard/')
         else:
             messages.info(request, 'Username or password is not correct!')
             messages.info(request, 'Account does not exist!')
             print("Incorrect credentials")
-            return render(request, 'login.html',{'incorrect_cred':1})
+            return render(request, 'login.html',{'incorrect_cred':True})
 
     print("Not Logged In")
     return render(request, 'login.html')
@@ -120,26 +142,16 @@ def add_food_item(request):
 
 @login_required(login_url='')
 def add_user_meal(request, pk):
-    # print(request.POST)
-    UserMealFormSet = inlineformset_factory(Profile, UserMeal, fields=('fooditem',), extra=1)
-    # xy=list(i.name for i in DjangoUser.objects.all().first()._meta.fields)
-    # tmp=User.objects.all().filter(id=pk)
-    user=Profile.objects.all().get(id=pk)
+    UserMealFormSet = inlineformset_factory(Profile, UserMeal, fields=('fooditem',), extra=10)
+    user = Profile.objects.get(id=request.user.id)
     formset = UserMealFormSet(queryset=UserMeal.objects.none(), instance=user)
-    # user=None
-    # print(xy)
-    # print(pk,type(tmp),type(user))
-    # for i in xy:
-    #     if i in ["date", "djangouser", "djangouser_id", "email", "id", "name", "usermeal", "username"]:
-    #         print(tmp.values(i),user.values(i))
 
     if request.method == 'POST':
         form = UserMealForm(request.POST)
         formset = UserMealFormSet(request.POST, instance=user)
-        # form.save()
         if formset.is_valid():
-            form.save()
-            return redirect('/')
+            formset.save()
+            return redirect('/dashboard/')
 
     context = {'form':formset}
     return render(request, 'add_usermeal.html', context)

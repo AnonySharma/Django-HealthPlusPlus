@@ -4,8 +4,11 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-    <p>Profile</p>
-    <p>Welcome, {{ user.username }}.</p>
+<h1 style="text-align: center; font-weight: bold;">PROFILE</h1>
+<hr>
+<p style="font-size: 2rem; text-align: center;">Welcome, <b>{{ user.first_name }}</b>!</p>
+<p style="font-size: 2rem; text-align: center;"><b>Username:</b> {{ user.username }}.</p>
+<p style="font-size: 2rem; text-align: center;"><b>Email:</b> {{ user.email }}.</p>
 
 {% include 'footer.html' %}
 {% endblock content %}

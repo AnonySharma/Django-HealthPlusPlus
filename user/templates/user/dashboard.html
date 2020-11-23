@@ -5,7 +5,6 @@
 {% include 'navbar.html' %}
     <h1 style="text-align: center;">DASHBOARD</h1>
     <p style="font-size: 2rem; text-align: center;">Welcome, {{ user.username }}.</p>
-    <!-- <a href="{% url 'logout' %}">LOGOUT</a> -->
 
     <div class="container">
         <div style="width: 50%; text-align: center; float: left;">
@@ -55,28 +54,7 @@
         </div>
         <!-- <br style="clear: both;"> -->
         <div style="width: 50%; text-align: center; float: right;">
-            <h1>{{ user.id }}</h1>
             <a href="{% url 'addusermeal' user.id %}"><button>Add user meal</button></a>
-            <!-- <form style="display: none;" class="addMeal">
-                {% csrf_token %}
-                <br>
-                <br>
-                <span class="noselect">Meal name:</span><br>
-                <input type="text" class="textbox" id="meal-name" name="meal-name">
-                <br>
-                <br>
-                <span class="noselect">Total Calories:</span><br>
-                <input type="number" class="textbox" id="meal-colorie" name="meal-colorie">
-                <br>
-                <br>
-                <span class="noselect">Food Items:</span><br>
-                <input type="number" class="textbox" id="meal-items" name="meal-items">
-                <br>
-                <br>
-                <div class="form-but-holder">
-                    <input type="submit" value="Add" class="form-but">
-                </div>
-            </form> -->
         </div>
     </div>
     <br style="clear: both;">
@@ -85,10 +63,36 @@
         <!-- Display food items for that user -->
         <span style="font-weight: bold; color: white; font-size: 2rem;">Meal History:</span>
         <br>
-        hi
-        {% for item in lfi %}
-            <p>item</p>
-        {% endfor %}
+        {% if isEmpty %}
+            <p>No history yet!</p>
+        {% else %}
+            <p><b>Total Calories:</b> {{Total}}</p>
+            <!-- {% for item in AllFoodItems %}
+                <p>{{item.name}}</p>
+            {% endfor %} -->
+            <table class="table table-sm" style="background-color: #fb593d;">
+				<tr>
+					<th>Name</th>
+                    <th>Calorie</th>
+                    <th>Fats</th>
+                    <th>Cholestrol</th>
+					<th>Carbohydrates</th>
+                    <th>Proteins</th>
+                    <th>Vitamins</th>
+				</tr>
+				{% for food in AllFoodItems %}
+				<tr>
+					<td> {{food.name}}</td>
+                    <td> {{food.total_calories}}</td>
+                    <td> {{food.fat}} </td>
+                    <td> {{food.cholesterol}} </td>
+					<td> {{food.carbohydrate}}</td>
+                    <td> {{food.protiens}}</td>
+                    <td> {{food.vitamins}}</td>
+                </tr>
+				{% endfor %}
+			</table>
+        {% endif %}
     </div>
     <script>
         function showAddFoodItemForm() {
