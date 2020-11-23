@@ -190,8 +190,6 @@ body {
 footer {
   /* UNCOMMENT THE COMMENT BELOW TO STICK THE FOOTER TOT HE BOTTOM OF THE SCREEN */
   position: fixed;
-  bottom: 0;
-  left: 0;
   top: calc(100vh - 70px);
   width: 100%;
   /* margin-top: auto; */
