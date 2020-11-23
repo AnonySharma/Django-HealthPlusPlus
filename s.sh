@@ -2,7 +2,7 @@
 
 if [[ $# -ne 1 ]]
 then
-    echo "You missed the arguement part, try [run,make,mig,shl]"
+    echo "You missed the arguement part, try [run,make,mig,shl,sup]"
 else
     if [[ $1 = "run" ]] 
     then
@@ -20,7 +20,11 @@ else
     then
         printf "\033[0;36m\033[1mRan command: \'python3 manage.py migrate\'\033[0m\n"
         python3 manage.py migrate
+    elif [[ $1 = "sup" ]] 
+    then
+        printf "\033[0;36m\033[1mRan command: \'python3 manage.py createsuperuser\'\033[0m\n"
+        python3 manage.py createsuperuser
     else
-        echo "Illegal arguments, try [run,make,mig,shl]"
+        echo "Illegal arguments, try [run,make,mig,shl,sup]"
     fi
 fi
