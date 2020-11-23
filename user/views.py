@@ -149,7 +149,7 @@ def add_food_item(request):
         else:
             messages.info(request, 'Food with same name already exists!')
 
-    return redirect('/dashboard/', lfi=listOfFoodItems)
+    return redirect('/dashboard/')
 
 @login_required(login_url='')
 def add_user_meal(request, pk):
