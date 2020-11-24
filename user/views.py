@@ -35,8 +35,7 @@ def about(request):
 @login_required(login_url='')
 def dashboard(request):
     user = Profile.objects.get(user_id=request.user.id)
-    total=UserMeal.objects.all()
-    myUserMeals=total.filter(user=user)
+    myUserMeals=UserMeal.objects.all().filter(user=user)
     
     allUserMeals=[]
     for food in myUserMeals:
@@ -53,14 +52,14 @@ def dashboard(request):
     
     isEmpty = myUserMeals.count()==0
     context = {'Total':totalCalories, 'AllFoodItems': finalFoodItems, 'isEmpty':isEmpty}
-    return render(request, "user/dashboard.html",context)
+    return render(request, "user/dashboard.html", context)
 
 @login_required(login_url='')
 def profile(request):
     user = Profile.objects.get(user_id=request.user.id)
     myUserMeals=UserMeal.objects.all().filter(user=user)
 
-    fats=chol=carb=prot=vit=0    
+    fats=chol=carb=prot=vit=0
     for food in myUserMeals:
         for item in food.fooditem.all():
             fats+=item.fat
@@ -105,7 +104,9 @@ def login_user(request):
     return render(request, 'login.html')
 
 def register_user(request):
-    # logout(request)
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/dashboard/')
+
     username = password = email = fname = lname = ""
     if request.POST:
         username = request.POST.get('username-reg')
@@ -157,7 +158,7 @@ def add_user_meal(request, pk):
     user = Profile.objects.get(id=request.user.id)
     formset = UserMealFormSet(queryset=UserMeal.objects.none(), instance=user)
 
-    if request.method == 'POST':
+    if request.POST:
         form = UserMealForm(request.POST)
         formset = UserMealFormSet(request.POST, instance=user)
         if formset.is_valid():
