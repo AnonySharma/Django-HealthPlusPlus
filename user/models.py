@@ -26,9 +26,7 @@ class FoodItem(models.Model):
         return self.name
 
 class UserMeal(models.Model):
-    # usermealID = models.CharField(max_length=1000)
     user = models.ForeignKey(Profile, null=True ,on_delete=models.CASCADE)
-    # fooditem = models.ManyToManyField(FoodItem, null=True ,on_delete=models.CASCADE)
     fooditem = models.ManyToManyField(FoodItem)
     quantity = models.IntegerField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
