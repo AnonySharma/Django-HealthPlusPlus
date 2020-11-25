@@ -11,7 +11,7 @@ Deployed at Heroku: [![img](https://i.ibb.co/2yZQT2S/deploy-32.png)](https://hea
     cd Django-HealthPlusPlus
 
 **Basic Setup:**<br>
-Run this to use shell shortcuts
+*(Run this to use shell shortcuts)*
 
     chmod +x s.sh
 
@@ -39,7 +39,7 @@ In the following code, replace \<PASS> with any password of your choice.
 
 **Setup settings.py**
 <br>
-Replace the following code in settings.py : 
+*(Replace the following code in settings.py)* <br>
 In the following code, replace \<USER> with the username you created above.<br>
 In the following code, replace \<PASS> with the password you created above.<br>
 
