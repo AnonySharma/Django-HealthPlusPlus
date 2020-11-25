@@ -35,7 +35,7 @@ In the following code, replace \<PASS> with any password of your choice.
     create database HPP_database;
     create user '<USER>'@'localhost' identified by '<PASS>';
     grant usage on *.* to '<USER>'@'localhost';
-    grant all priveleges on CMS_database.* to '<USER>'@'localhost';
+    grant all priveleges on HPP_database.* to '<USER>'@'localhost';
 
 **Setup settings.py**
 <br>
